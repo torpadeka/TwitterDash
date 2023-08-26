@@ -52,7 +52,3 @@ header {
   background-color: rgb(238, 238, 238);
   border: none;
 }
-
-.empty {
-  display: flex;
-}
