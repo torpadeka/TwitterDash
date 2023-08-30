@@ -7,7 +7,7 @@ async function getApi() {
   const rawData = await allUsersResponse.json();
   const usersData = rawData.users;
   console.log(usersData);
-  for (let i = 0; i < 10; i++) {
+  for (let i = 9; i >= 0; i--) {
     const currentData = usersData[i];
     // found this method in google :D
     userList.insertAdjacentHTML(
