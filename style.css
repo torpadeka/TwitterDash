@@ -17,13 +17,10 @@ input {
 /* HEADER */
 
 header {
-  display: flex;
-  max-width: 1400px;
-  margin: 0px 400px;
-  gap: 200px;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
+  display: grid;
+  max-width: 1079px;
+  margin: 0px auto;
+  grid-template-columns: 1fr 1fr 1fr;
   padding: 12px 40px;
   border-bottom: solid 1px rgba(223, 223, 223, 1);
   border-left: solid 1px rgba(223, 223, 223, 1);
@@ -68,8 +65,8 @@ header {
 /* MAIN */
 
 main {
-  max-width: 1400px;
-  margin: 0px 400px;
+  max-width: 1079px;
+  margin: 0px auto;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -106,11 +103,19 @@ main {
   background-color: transparent;
 }
 
-.user-button:hover {
+.user:hover {
   background-color: rgba(29, 155, 240, 0.2);
 }
 
-.user img {
+.user.active {
+  background-color: rgba(29, 155, 240, 0.2);
+}
+
+.user.active .chevron {
+  color: rgba(29, 155, 240, 1);
+}
+
+.pfp {
   border-radius: 50%;
   width: 50px;
 }
@@ -123,6 +128,10 @@ main {
 
 .male-gender {
   color: blue;
+}
+
+.female-gender {
+  color: rgb(181, 3, 163);
 }
 
 .email {
@@ -173,7 +182,7 @@ main {
   background-color: rgba(29, 155, 240, 1);
 }
 
-/* RIGHT SIDE */
+/* RIGHT SIDE EMPTY */
 
 .user-details-empty {
   padding-top: 80px;
@@ -184,6 +193,7 @@ main {
   gap: 10px;
   background-color: #f9f9f9;
   border-right: solid 1px rgba(223, 223, 223, 1);
+  border-bottom: solid 1px rgba(223, 223, 223, 1);
 }
 
 .tutorial-header {
@@ -195,4 +205,106 @@ main {
 .tutorial-text {
   font-size: 12px;
   color: #757575;
+}
+
+/* RIGHT SIDE FILLED */
+
+.user-details-filled {
+  width: 100%;
+  border-right: solid 1px rgba(223, 223, 223, 1);
+  border-bottom: solid 1px rgba(223, 223, 223, 1);
+  display: flex;
+  flex-direction: column;
+}
+
+.user-info {
+  height: 215px;
+  width: 100%;
+  background-color: #ffffff;
+  border-bottom: solid 1px rgba(223, 223, 223, 1);
+}
+
+.user-profile {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: 15px;
+  width: 400px;
+  position: relative;
+  padding-top: 25px;
+  padding-left: 40px;
+  padding-bottom: 20px;
+  align-items: center;
+}
+
+.user-background {
+  display: grid;
+  grid-template-columns: 260px 320px;
+  grid-template-rows: auto;
+  padding-left: 40px;
+  padding-bottom: 30px;
+  row-gap: 20px;
+}
+
+.mini-header {
+  color: rgb(117, 117, 117);
+  font-size: 11px;
+}
+
+.mini-content {
+  font-size: 13px;
+}
+
+.user-posts {
+  width: 100%;
+  height: 100%;
+  background-color: #f9f9f9;
+}
+
+.user-posts h1 {
+  padding: 20px 40px;
+  padding-bottom: 15px;
+  font-size: 20px;
+  font-family: "Syne", sans-serif;
+}
+
+.post-list {
+  padding-left: 40px;
+  padding-right: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.posts {
+  padding: 20px 20px;
+  padding-bottom: 15px;
+  background-color: white;
+  border: solid 1px rgba(223, 223, 223, 1);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.post-header {
+  font-family: "Syne", sans-serif;
+}
+
+.posts p {
+  font-size: 12.5px;
+}
+
+.post-tags {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.post-tags span {
+  font-size: 12px;
+  background-color: rgba(29, 155, 240, 1);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 12px;
 }

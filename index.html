@@ -25,6 +25,7 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="./style.css" />
+    <script src="./script.js" defer></script>
   </head>
   <body>
     <header>
@@ -39,150 +40,9 @@
         <input class="search-bar" type="text" placeholder="Search User" />
       </div>
     </header>
-
-    <main>
+    <main id="main">
       <!-- LEFT SIDE -->
-      <div class="user-list">
-        <div class="user no1">
-          <button class="user-button"></button>
-          <img src="./assets/dummy_pfp.png" alt="#" />
-          <div class="user-info-text">
-            <!-- NAME & GENDER -->
-            <div class="name-and-gender">
-              <span>Darren Kent</span>
-              <span class="material-symbols-sharp male-gender"> male </span>
-            </div>
-            <!-- EMAIL -->
-            <div class="email">email@provider.com</div>
-          </div>
-          <span class="material-symbols-sharp chevron"> chevron_right </span>
-        </div>
-        <div class="user no2">
-          <button class="user-button"></button>
-          <img src="./assets/dummy_pfp.png" alt="#" />
-          <div class="user-info-text">
-            <!-- NAME & GENDER -->
-            <div class="name-and-gender">
-              <span>Darren Kent</span>
-              <span class="material-symbols-sharp male-gender"> male </span>
-            </div>
-            <!-- EMAIL -->
-            <div class="email">email@provider.com</div>
-          </div>
-          <span class="material-symbols-sharp chevron"> chevron_right </span>
-        </div>
-        <div class="user no3">
-          <button class="user-button"></button>
-          <img src="./assets/dummy_pfp.png" alt="#" />
-          <div class="user-info-text">
-            <!-- NAME & GENDER -->
-            <div class="name-and-gender">
-              <span>Darren Kent</span>
-              <span class="material-symbols-sharp male-gender"> male </span>
-            </div>
-            <!-- EMAIL -->
-            <div class="email">email@provider.com</div>
-          </div>
-          <span class="material-symbols-sharp chevron"> chevron_right </span>
-        </div>
-        <div class="user no4">
-          <button class="user-button"></button>
-          <img src="./assets/dummy_pfp.png" alt="#" />
-          <div class="user-info-text">
-            <!-- NAME & GENDER -->
-            <div class="name-and-gender">
-              <span>Darren Kent</span>
-              <span class="material-symbols-sharp male-gender"> male </span>
-            </div>
-            <!-- EMAIL -->
-            <div class="email">email@provider.com</div>
-          </div>
-          <span class="material-symbols-sharp chevron"> chevron_right </span>
-        </div>
-        <div class="user no5">
-          <button class="user-button"></button>
-          <img src="./assets/dummy_pfp.png" alt="#" />
-          <div class="user-info-text">
-            <!-- NAME & GENDER -->
-            <div class="name-and-gender">
-              <span>Darren Kent</span>
-              <span class="material-symbols-sharp male-gender"> male </span>
-            </div>
-            <!-- EMAIL -->
-            <div class="email">email@provider.com</div>
-          </div>
-          <span class="material-symbols-sharp chevron"> chevron_right </span>
-        </div>
-        <div class="user no6">
-          <button class="user-button"></button>
-          <img src="./assets/dummy_pfp.png" alt="#" />
-          <div class="user-info-text">
-            <!-- NAME & GENDER -->
-            <div class="name-and-gender">
-              <span>Darren Kent</span>
-              <span class="material-symbols-sharp male-gender"> male </span>
-            </div>
-            <!-- EMAIL -->
-            <div class="email">email@provider.com</div>
-          </div>
-          <span class="material-symbols-sharp chevron"> chevron_right </span>
-        </div>
-        <div class="user no7">
-          <button class="user-button"></button>
-          <img src="./assets/dummy_pfp.png" alt="#" />
-          <div class="user-info-text">
-            <!-- NAME & GENDER -->
-            <div class="name-and-gender">
-              <span>Darren Kent</span>
-              <span class="material-symbols-sharp male-gender"> male </span>
-            </div>
-            <!-- EMAIL -->
-            <div class="email">email@provider.com</div>
-          </div>
-          <span class="material-symbols-sharp chevron"> chevron_right </span>
-        </div>
-        <div class="user no8">
-          <button class="user-button"></button>
-          <img src="./assets/dummy_pfp.png" alt="#" />
-          <div class="user-info-text">
-            <!-- NAME & GENDER -->
-            <div class="name-and-gender">
-              <span>Darren Kent</span>
-              <span class="material-symbols-sharp male-gender"> male </span>
-            </div>
-            <!-- EMAIL -->
-            <div class="email">email@provider.com</div>
-          </div>
-          <span class="material-symbols-sharp chevron"> chevron_right </span>
-        </div>
-        <div class="user no9">
-          <button class="user-button"></button>
-          <img src="./assets/dummy_pfp.png" alt="#" />
-          <div class="user-info-text">
-            <!-- NAME & GENDER -->
-            <div class="name-and-gender">
-              <span>Darren Kent</span>
-              <span class="material-symbols-sharp male-gender"> male </span>
-            </div>
-            <!-- EMAIL -->
-            <div class="email">email@provider.com</div>
-          </div>
-          <span class="material-symbols-sharp chevron"> chevron_right </span>
-        </div>
-        <div class="user no10">
-          <button class="user-button"></button>
-          <img src="./assets/dummy_pfp.png" alt="#" />
-          <div class="user-info-text">
-            <!-- NAME & GENDER -->
-            <div class="name-and-gender">
-              <span>Darren Kent</span>
-              <span class="material-symbols-sharp male-gender"> male </span>
-            </div>
-            <!-- EMAIL -->
-            <div class="email">email@provider.com</div>
-          </div>
-          <span class="material-symbols-sharp chevron"> chevron_right </span>
-        </div>
+      <div class="user-list" id="user-list">
         <div class="list-controls">
           <button class="prev-button">Prev</button>
           <div class="list-info">
@@ -194,7 +54,9 @@
       </div>
 
       <!-- RIGHT SIDE -->
-      <div class="user-details-empty">
+
+      <!-- EMPTY -->
+      <div class="user-details-empty" id="user-details-empty">
         <span class="tutorial-header"
           >You can see User's detail and their posts here</span
         >
@@ -202,6 +64,100 @@
           >Click on any users in the left list to see their details</span
         >
       </div>
+
+      <!-- FILLED -->
+
+      <!-- <div class="user-details-filled" id="user-details-filled">
+        <div class="user-info">
+          <div class="user-profile">
+            <img class="pfp" src="./assets/dummy_pfp.png" alt="#" />
+            <div class="user-info-text">
+              <div class="name-and-gender">
+                <span>Darren Kent</span>
+                <span class="material-symbols-sharp male-gender"> male </span>
+              </div>
+              <div class="email">email@provider.com</div>
+            </div>
+          </div>
+          <div class="user-background">
+            <div>
+              <span class="mini-header">Education</span>
+              <br />
+              <span class="education mini-content" id="education"
+                >BINUS University</span
+              >
+            </div>
+            <div>
+              <span class="mini-header">Address</span>
+              <br />
+              <span class="address mini-content" id="address"
+                >1745 T Street Southeast, Washington</span
+              >
+            </div>
+            <div>
+              <span class="mini-header">Occupation</span>
+              <br />
+              <span class="occupation mini-content" id="occupation"
+                >Grim Reaper</span
+              >
+            </div>
+            <div>
+              <span class="mini-header">Company Name</span>
+              <br />
+              <span class="company-name mini-content" id="company-name"
+                >Deathly Fantasies O' Fee</span
+              >
+            </div>
+          </div>
+        </div>
+        <div class="user-posts">
+          <h1>Darren's Posts</h1>
+          <div class="post-list">
+            <div class="posts">
+              <span class="post-header">They rushed out the door.</span>
+              <p>
+                The Dragoon is one of the core units in the Protoss army.
+                Whereas normally their ground units cannot engage enemies that
+                are in the air, the Dragoon can make quick work of almost
+                anything, on the ground or in the air.
+              </p>
+              <div class="post-tags">
+                <span>fiction</span>
+                <span>game</span>
+                <span>lore</span>
+              </div>
+            </div>
+            <div class="posts">
+              <span class="post-header">They rushed out the door.</span>
+              <p>
+                The Dragoon is one of the core units in the Protoss army.
+                Whereas normally their ground units cannot engage enemies that
+                are in the air, the Dragoon can make quick work of almost
+                anything, on the ground or in the air.
+              </p>
+              <div class="post-tags">
+                <span>fiction</span>
+                <span>game</span>
+                <span>lore</span>
+              </div>
+            </div>
+            <div class="posts">
+              <span class="post-header">They rushed out the door.</span>
+              <p>
+                The Dragoon is one of the core units in the Protoss army.
+                Whereas normally their ground units cannot engage enemies that
+                are in the air, the Dragoon can make quick work of almost
+                anything, on the ground or in the air.
+              </p>
+              <div class="post-tags">
+                <span>fiction</span>
+                <span>game</span>
+                <span>lore</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> -->
     </main>
   </body>
 </html>
