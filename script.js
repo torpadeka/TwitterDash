@@ -2,24 +2,32 @@
 
 const userList = document.getElementById("user-list");
 
-async function getApi() {
-  const allUsersResponse = await fetch("https://dummyjson.com/users");
+let firstTime = true;
+
+async function renderGetApi(page) {
+  const limit = 10;
+  const skip = (page - 1) * limit;
+
+  const allUsersResponse = await fetch(
+    `https://dummyjson.com/users?limit=${limit}&skip=${skip}`
+  );
   const rawData = await allUsersResponse.json();
   const usersData = rawData.users;
   console.log(usersData);
-  for (let i = 9; i >= 0; i--) {
+  for (let i = usersData.length - 1; i >= usersData.length - 10; i--) {
     const currentData = usersData[i];
-    // found this method in google :D
     userList.insertAdjacentHTML(
       "afterBegin",
-      `<div class="user">
+      `<div class="user" id="${usersData.length - 1}">
     <button class="user-button"></button>
     <img class="pfp" src=${currentData.image} alt="#" />
     <div class="user-info-text">
       <!-- NAME & GENDER -->
       <div class="name-and-gender">
         <span>${currentData.firstName} ${currentData.lastName}</span>
-        <span class="material-symbols-sharp male-gender"> male </span>
+        <span class="material-symbols-sharp ${currentData.gender}-gender"> ${
+        currentData.gender
+      } </span>
       </div>
       <!-- EMAIL -->
       <div class="email">${currentData.email}</div>
@@ -32,11 +40,18 @@ async function getApi() {
   const userButton = document.getElementsByClassName("user-button");
   const rightSide = document.getElementById("user-details-empty");
 
-  let firstTime = true;
   let currentData = [];
 
   let currentSelectedUser = [];
-  for (let i = 0; i < user.length; i++) {
+
+  for (let i = usersData.length - 1; i >= usersData.length - 10; i--) {
+    const userPostsResponse = await fetch(
+      `https://dummyjson.com/posts/user/${i + 1}`
+    );
+    const userPosts = await userPostsResponse.json();
+    console.log(userPosts);
+    const currentData = usersData[i];
+
     function handleUserClick() {
       if (firstTime === true) {
         rightSide.classList.remove("user-details-empty");
@@ -44,11 +59,11 @@ async function getApi() {
         rightSide.innerHTML = "";
         rightSide.innerHTML += `<div class="user-info">
           <div class="user-profile">
-            <img class="pfp" src="./assets/dummy_pfp.png" alt="#" />
+            <img class="pfp" src=${currentData.image} alt="#" />
             <div class="user-info-text">
               <div class="name-and-gender">
-                <span>Darren Kent</span>
-                <span class="material-symbols-sharp male-gender"> male </span>
+                <span>${currentData.firstName} ${currentData.lastName}</span>
+                <span class="material-symbols-sharp ${currentData.gender}-gender"> ${currentData.gender} </span>
               </div>
               <div class="email">email@provider.com</div>
             </div>
@@ -58,173 +73,122 @@ async function getApi() {
               <span class="mini-header">Education</span>
               <br />
               <span class="education mini-content" id="education"
-                >BINUS University</span
+                >${currentData.university}</span
               >
             </div>
             <div>
               <span class="mini-header">Address</span>
               <br />
               <span class="address mini-content" id="address"
-                >1745 T Street Southeast, Washington</span
+                >${currentData.address.address}</span
               >
             </div>
             <div>
               <span class="mini-header">Occupation</span>
               <br />
               <span class="occupation mini-content" id="occupation"
-                >Grim Reaper</span
+                >${currentData.company.title}</span
               >
             </div>
             <div>
               <span class="mini-header">Company Name</span>
               <br />
               <span class="company-name mini-content" id="company-name"
-                >Deathly Fantasies O' Fee</span
+                >${currentData.company.name}</span
               >
             </div>
           </div>
         </div>
         <div class="user-posts">
-          <h1>Darren's Posts</h1>
-          <div class="post-list">
-            <div class="posts">
-              <span class="post-header">They rushed out the door.</span>
-              <p>
-                The Dragoon is one of the core units in the Protoss army.
-                Whereas normally their ground units cannot engage enemies that
-                are in the air, the Dragoon can make quick work of almost
-                anything, on the ground or in the air.
-              </p>
-              <div class="post-tags">
-                <span>fiction</span>
-                <span>game</span>
-                <span>lore</span>
-              </div>
-            </div>
-            <div class="posts">
-              <span class="post-header">They rushed out the door.</span>
-              <p>
-                The Dragoon is one of the core units in the Protoss army.
-                Whereas normally their ground units cannot engage enemies that
-                are in the air, the Dragoon can make quick work of almost
-                anything, on the ground or in the air.
-              </p>
-              <div class="post-tags">
-                <span>fiction</span>
-                <span>game</span>
-                <span>lore</span>
-              </div>
-            </div>
-            <div class="posts">
-              <span class="post-header">They rushed out the door.</span>
-              <p>
-                The Dragoon is one of the core units in the Protoss army.
-                Whereas normally their ground units cannot engage enemies that
-                are in the air, the Dragoon can make quick work of almost
-                anything, on the ground or in the air.
-              </p>
-              <div class="post-tags">
-                <span>fiction</span>
-                <span>game</span>
-                <span>lore</span>
-              </div>
-            </div>
+          <h1>${currentData.firstName}'s Posts</h1>
+          <div class="post-list" id="post-list">
           </div>
         </div>`;
         firstTime = false;
+        const postList = document.getElementById("post-list");
+        for (let p = 0; p < userPosts.posts.length; p++) {
+          let currentPost = userPosts.posts[p];
+          postList.innerHTML += `<div class="posts">
+        <span class="post-header">${currentPost.title}</span>
+        <p>
+           ${currentPost.body}
+        </p>
+        <div class="post-tags" id="post-tags-${p}">
+        </div>
+      </div>`;
+          let postTags = document.getElementById(`post-tags-${p}`);
+          for (let m = 0; m < currentPost.tags.length; m++) {
+            postTags.innerHTML += `<span>${currentPost.tags[m]}</span>`;
+          }
+        }
+
         currentSelectedUser = user[i];
         currentSelectedUser.classList.toggle("active");
       } else {
         rightSide.innerHTML = "";
         rightSide.innerHTML += `<div class="user-info">
-          <div class="user-profile">
-            <img class="pfp" src="./assets/dummy_pfp.png" alt="#" />
-            <div class="user-info-text">
-              <div class="name-and-gender">
-                <span>torpadeka</span>
-                <span class="material-symbols-sharp male-gender"> male </span>
-              </div>
-              <div class="email">email@provider.com</div>
+        <div class="user-profile">
+          <img class="pfp" src=${currentData.image} alt="#" />
+          <div class="user-info-text">
+            <div class="name-and-gender">
+              <span>${currentData.firstName} ${currentData.lastName}</span>
+              <span class="material-symbols-sharp ${currentData.gender}-gender"> ${currentData.gender} </span>
             </div>
-          </div>
-          <div class="user-background">
-            <div>
-              <span class="mini-header">Education</span>
-              <br />
-              <span class="education mini-content" id="education"
-                >BINUS University</span
-              >
-            </div>
-            <div>
-              <span class="mini-header">Address</span>
-              <br />
-              <span class="address mini-content" id="address"
-                >1745 T Street Southeast, Washington</span
-              >
-            </div>
-            <div>
-              <span class="mini-header">Occupation</span>
-              <br />
-              <span class="occupation mini-content" id="occupation"
-                >Grim Reaper</span
-              >
-            </div>
-            <div>
-              <span class="mini-header">Company Name</span>
-              <br />
-              <span class="company-name mini-content" id="company-name"
-                >Deathly Fantasies O' Fee</span
-              >
-            </div>
+            <div class="email">email@provider.com</div>
           </div>
         </div>
-        <div class="user-posts">
-          <h1>Darren's Posts</h1>
-          <div class="post-list">
-            <div class="posts">
-              <span class="post-header">They rushed out the door.</span>
-              <p>
-                The Dragoon is one of the core units in the Protoss army.
-                Whereas normally their ground units cannot engage enemies that
-                are in the air, the Dragoon can make quick work of almost
-                anything, on the ground or in the air.
-              </p>
-              <div class="post-tags">
-                <span>fiction</span>
-                <span>game</span>
-                <span>lore</span>
-              </div>
-            </div>
-            <div class="posts">
-              <span class="post-header">They rushed out the door.</span>
-              <p>
-                The Dragoon is one of the core units in the Protoss army.
-                Whereas normally their ground units cannot engage enemies that
-                are in the air, the Dragoon can make quick work of almost
-                anything, on the ground or in the air.
-              </p>
-              <div class="post-tags">
-                <span>fiction</span>
-                <span>game</span>
-                <span>lore</span>
-              </div>
-            </div>
-            <div class="posts">
-              <span class="post-header">They rushed out the door.</span>
-              <p>
-                The Dragoon is one of the core units in the Protoss army.
-                Whereas normally their ground units cannot engage enemies that
-                are in the air, the Dragoon can make quick work of almost
-                anything, on the ground or in the air.
-              </p>
-              <div class="post-tags">
-                <span>fiction</span>
-                <span>game</span>
-                <span>lore</span>
-              </div>
-            </div>
+        <div class="user-background">
+          <div>
+            <span class="mini-header">Education</span>
+            <br />
+            <span class="education mini-content" id="education"
+              >${currentData.university}</span
+            >
           </div>
-        </div>`;
+          <div>
+            <span class="mini-header">Address</span>
+            <br />
+            <span class="address mini-content" id="address"
+              >${currentData.address.address}</span
+            >
+          </div>
+          <div>
+            <span class="mini-header">Occupation</span>
+            <br />
+            <span class="occupation mini-content" id="occupation"
+              >${currentData.company.title}</span
+            >
+          </div>
+          <div>
+            <span class="mini-header">Company Name</span>
+            <br />
+            <span class="company-name mini-content" id="company-name"
+              >${currentData.company.name}</span
+            >
+          </div>
+        </div>
+      </div>
+      <div class="user-posts">
+        <h1>${currentData.firstName}'s Posts</h1>
+        <div class="post-list" id="post-list">
+        </div>
+      </div>`;
+        const postList = document.getElementById("post-list");
+        for (let p = 0; p < userPosts.posts.length; p++) {
+          let currentPost = userPosts.posts[p];
+          postList.innerHTML += `<div class="posts">
+        <span class="post-header">${currentPost.title}</span>
+        <p>
+           ${currentPost.body}
+        </p>
+        <div class="post-tags" id="post-tags-${p}">
+        </div>
+      </div>`;
+          let postTags = document.getElementById(`post-tags-${p}`);
+          for (let m = 0; m < currentPost.tags.length; m++) {
+            postTags.innerHTML += `<span>${currentPost.tags[m]}</span>`;
+          }
+        }
         currentSelectedUser.classList.toggle("active");
         currentSelectedUser = user[i];
         currentSelectedUser.classList.toggle("active");
@@ -234,4 +198,8 @@ async function getApi() {
   }
 }
 
-getApi();
+renderGetApi(1);
+
+const prevButton = document.getElementById("prev");
+
+const nextButton = document.getElementById("next");
