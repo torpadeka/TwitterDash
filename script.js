@@ -1,6 +1,10 @@
 "use strict";
 
+const header = document.getElementById("header");
 const userList = document.getElementById("user-list");
+let userCustomId = 1;
+let currentPage = 1;
+let differentPage = false;
 
 let firstTime = true;
 
@@ -18,16 +22,14 @@ async function renderGetApi(page) {
     const currentData = usersData[i];
     userList.insertAdjacentHTML(
       "afterBegin",
-      `<div class="user" id="${usersData.length - 1}">
+      `<div class="user" id="${userCustomId}">
     <button class="user-button"></button>
     <img class="pfp" src=${currentData.image} alt="#" />
     <div class="user-info-text">
       <!-- NAME & GENDER -->
       <div class="name-and-gender">
         <span>${currentData.firstName} ${currentData.lastName}</span>
-        <span class="material-symbols-sharp ${currentData.gender}-gender"> ${
-        currentData.gender
-      } </span>
+        <span class="material-symbols-sharp ${currentData.gender}-gender"> ${currentData.gender} </span>
       </div>
       <!-- EMAIL -->
       <div class="email">${currentData.email}</div>
@@ -35,7 +37,9 @@ async function renderGetApi(page) {
     <span class="material-symbols-sharp chevron"> chevron_right </span>
   </div>`
     );
+    userCustomId++;
   }
+  userCustomId = 1;
   const user = document.getElementsByClassName("user");
   const userButton = document.getElementsByClassName("user-button");
   const rightSide = document.getElementById("user-details-empty");
@@ -189,12 +193,31 @@ async function renderGetApi(page) {
             postTags.innerHTML += `<span>${currentPost.tags[m]}</span>`;
           }
         }
-        currentSelectedUser.classList.toggle("active");
-        currentSelectedUser = user[i];
-        currentSelectedUser.classList.toggle("active");
+
+        if (differentPage === true) {
+          currentSelectedUser = user[i];
+          currentSelectedUser.classList.toggle("active");
+          differentPage = false;
+        } else {
+          currentSelectedUser.classList.toggle("active");
+          currentSelectedUser = user[i];
+          currentSelectedUser.classList.toggle("active");
+        }
       }
     }
     userButton[i].addEventListener("click", handleUserClick);
+  }
+  const buttonBlocker = document.getElementById("button-blocker");
+  buttonBlocker.remove();
+  const enablePrevButton = document.getElementById("prev");
+  const enableNextButton = document.getElementById("next");
+  if (currentPage !== 1) {
+    enablePrevButton.classList.toggle("inactive-button");
+    enablePrevButton.classList.toggle("active-button");
+  }
+  if (currentPage !== 3) {
+    enableNextButton.classList.toggle("inactive-button");
+    enableNextButton.classList.toggle("active-button");
   }
 }
 
@@ -203,3 +226,68 @@ renderGetApi(1);
 const prevButton = document.getElementById("prev");
 
 const nextButton = document.getElementById("next");
+
+function handleNext() {
+  if (
+    currentPage === 3 ||
+    nextButton.classList.contains("inactive-button") === true
+  ) {
+    return;
+  } else {
+    header.innerHTML += `<button class="button-blocker" id="button-blocker">Loading . . .</button>`;
+    nextButton.classList.toggle("active-button");
+    nextButton.classList.toggle("inactive-button");
+    if (prevButton.classList.contains("active-button") === true) {
+      prevButton.classList.toggle("active-button");
+      prevButton.classList.toggle("inactive-button");
+    }
+    currentPage++;
+    const listInfo = document.getElementById("page-info");
+    console.log(listInfo);
+    listInfo.innerHTML = "";
+    listInfo.innerHTML += `<span>Showing ${(currentPage - 1) * 10 + 1}-${
+      currentPage * 10
+    }</span>
+    <span>from 30 results</span>`;
+    for (let i = 1; i <= 10; i++) {
+      const userForRemoval = document.getElementById(`${i}`);
+      userForRemoval.remove();
+    }
+    differentPage = true;
+    renderGetApi(currentPage);
+  }
+}
+
+function handlePrev() {
+  if (
+    currentPage === 1 ||
+    prevButton.classList.contains("inactive-button") === true
+  ) {
+    return;
+  } else {
+    header.innerHTML += `<button class="button-blocker" id="button-blocker">Loading . . .</button>`;
+    prevButton.classList.toggle("active-button");
+    prevButton.classList.toggle("inactive-button");
+    if (nextButton.classList.contains("active-button") === true) {
+      nextButton.classList.toggle("active-button");
+      nextButton.classList.toggle("inactive-button");
+    }
+    currentPage--;
+    const listInfo = document.getElementById("page-info");
+    console.log(listInfo);
+    listInfo.innerHTML = "";
+    listInfo.innerHTML += `<span>Showing ${(currentPage - 1) * 10 + 1}-${
+      currentPage * 10
+    }</span>
+    <span>from 30 results</span>`;
+    for (let i = 1; i <= 10; i++) {
+      const userForRemoval = document.getElementById(`${i}`);
+      userForRemoval.remove();
+    }
+    differentPage = true;
+    renderGetApi(currentPage);
+  }
+}
+
+prevButton.addEventListener("click", handlePrev);
+nextButton.addEventListener("click", handleNext);

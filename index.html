@@ -28,7 +28,7 @@
     <script src="./script.js" defer></script>
   </head>
   <body>
-    <header>
+    <header id="header">
       <!-- LOGO -->
       <div class="logo">
         <img class="logo-img" src="./assets/twitter_logo.webp" alt="#" />
@@ -39,17 +39,25 @@
         <span class="material-symbols-sharp"> person_search </span>
         <input class="search-bar" type="text" placeholder="Search User" />
       </div>
+      <!-- CREDIT TEXT -->
+      <div class="credit-text">
+        <a href="https://github.com/torpadeka/twitter-dash/"
+          >made by torpadeka</a
+        >
+      </div>
+      <button class="button-blocker" id="button-blocker">Loading . . .</button>
     </header>
+
     <main id="main">
       <!-- LEFT SIDE -->
       <div class="user-list" id="user-list">
         <div class="list-controls">
           <button class="prev-button inactive-button" id="prev">Prev</button>
-          <div class="list-info">
+          <div class="list-info" id="page-info">
             <span>Showing 1-10</span>
             <span>from 30 results</span>
           </div>
-          <button class="next-button active-button" id="next">Next</button>
+          <button class="next-button inactive-button" id="next">Next</button>
         </div>
       </div>
 
