@@ -2,10 +2,12 @@
 
 const header = document.getElementById("header");
 const userList = document.getElementById("user-list");
+
 let userCustomId = 1;
 let currentPage = 1;
 let differentPage = false;
 
+let firstTimeLoad = true;
 let firstTime = true;
 
 async function renderGetApi(page) {
