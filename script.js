@@ -6,9 +6,10 @@ const userList = document.getElementById("user-list");
 let userCustomId = 1;
 let currentPage = 1;
 let differentPage = false;
+let isSearch = false;
 
-let firstTimeLoad = true;
 let firstTime = true;
+let firstTimeLoad = true;
 
 async function renderGetApi(page) {
   const limit = 10;
@@ -18,8 +19,9 @@ async function renderGetApi(page) {
     `https://dummyjson.com/users?limit=${limit}&skip=${skip}`
   );
   const rawData = await allUsersResponse.json();
+
   const usersData = rawData.users;
-  console.log(usersData);
+  // console.log(usersData);
   for (let i = usersData.length - 1; i >= usersData.length - 10; i--) {
     const currentData = usersData[i];
     userList.insertAdjacentHTML(
@@ -54,8 +56,9 @@ async function renderGetApi(page) {
     const userPostsResponse = await fetch(
       `https://dummyjson.com/posts/user/${i + 1}`
     );
+
     const userPosts = await userPostsResponse.json();
-    console.log(userPosts);
+    // console.log(userPosts);
     const currentData = usersData[i];
 
     function handleUserClick() {
@@ -207,10 +210,20 @@ async function renderGetApi(page) {
         }
       }
     }
+
     userButton[i].addEventListener("click", handleUserClick);
   }
   const buttonBlocker = document.getElementById("button-blocker");
   buttonBlocker.remove();
+  if (firstTimeLoad === true) {
+    const pageInfo = document.getElementById("page-info");
+    pageInfo.innerHTML = "";
+    pageInfo.innerHTML += `<span>Showing ${(currentPage - 1) * 10 + 1}-${
+      currentPage * 10
+    }</span>
+   <span>from 30 results</span>`;
+    firstTimeLoad = false;
+  }
   const enablePrevButton = document.getElementById("prev");
   const enableNextButton = document.getElementById("next");
   if (currentPage !== 1) {
@@ -225,6 +238,14 @@ async function renderGetApi(page) {
 
 renderGetApi(1);
 
+async function searchUser(searchQuery) {
+  const searchResultsResponse = await fetch(
+    `https://dummyjson.com/users/search?q=${searchQuery}&limit=10`
+  );
+  const searchResults = await searchResultsResponse.json();
+  console.log(searchResults);
+}
+
 const prevButton = document.getElementById("prev");
 
 const nextButton = document.getElementById("next");
@@ -236,7 +257,9 @@ function handleNext() {
   ) {
     return;
   } else {
-    header.innerHTML += `<button class="button-blocker" id="button-blocker">Loading . . .</button>`;
+    header.innerHTML += `<button class="button-blocker" id="button-blocker">
+    Loading . . .<br />Please wait a moment
+  </button>`;
     nextButton.classList.toggle("active-button");
     nextButton.classList.toggle("inactive-button");
     if (prevButton.classList.contains("active-button") === true) {
@@ -245,7 +268,6 @@ function handleNext() {
     }
     currentPage++;
     const listInfo = document.getElementById("page-info");
-    console.log(listInfo);
     listInfo.innerHTML = "";
     listInfo.innerHTML += `<span>Showing ${(currentPage - 1) * 10 + 1}-${
       currentPage * 10
@@ -267,7 +289,9 @@ function handlePrev() {
   ) {
     return;
   } else {
-    header.innerHTML += `<button class="button-blocker" id="button-blocker">Loading . . .</button>`;
+    header.innerHTML += `<button class="button-blocker" id="button-blocker">
+    Loading . . .<br />Please wait a moment
+  </button>`;
     prevButton.classList.toggle("active-button");
     prevButton.classList.toggle("inactive-button");
     if (nextButton.classList.contains("active-button") === true) {
@@ -276,7 +300,6 @@ function handlePrev() {
     }
     currentPage--;
     const listInfo = document.getElementById("page-info");
-    console.log(listInfo);
     listInfo.innerHTML = "";
     listInfo.innerHTML += `<span>Showing ${(currentPage - 1) * 10 + 1}-${
       currentPage * 10
@@ -293,3 +316,44 @@ function handlePrev() {
 
 prevButton.addEventListener("click", handlePrev);
 nextButton.addEventListener("click", handleNext);
+
+const searchInput = document.getElementById("search-bar");
+
+searchInput.addEventListener("keypress", function (event) {
+  if (event.key === "Enter") {
+    console.log(`Search Value = ${searchInput.value}`);
+    isSearch = true;
+    if (searchInput.value === "") {
+      header.insertAdjacentHTML(
+        "afterbegin",
+        `<button class="button-blocker" id="button-blocker">
+        Loading . . .<br />Please wait a moment
+      </button>`
+      );
+      if (prevButton.classList.contains("active-button") === true) {
+        prevButton.classList.toggle("active-button");
+        prevButton.classList.toggle("inactive-button");
+      }
+
+      if (nextButton.classList.contains("active-button") === true) {
+        nextButton.classList.toggle("active-button");
+        nextButton.classList.toggle("inactive-button");
+      }
+      currentPage = 1;
+      const listInfo = document.getElementById("page-info");
+      listInfo.innerHTML = "";
+      listInfo.innerHTML += `<span>Showing ${(currentPage - 1) * 10 + 1}-${
+        currentPage * 10
+      }</span>
+        <span>from 30 results</span>`;
+      for (let i = 1; i <= 10; i++) {
+        const userForRemoval = document.getElementById(`${i}`);
+        userForRemoval.remove();
+      }
+      differentPage = false;
+      renderGetApi(1);
+    } else {
+      searchUser(searchInput.value);
+    }
+  }
+});

@@ -37,7 +37,12 @@
       <!-- SEARCH BAR -->
       <div class="search-bar-container">
         <span class="material-symbols-sharp"> person_search </span>
-        <input class="search-bar" type="text" placeholder="Search User" />
+        <input
+          class="search-bar"
+          id="search-bar"
+          type="text"
+          placeholder="Search User"
+        />
       </div>
       <!-- CREDIT TEXT -->
       <div class="credit-text">
@@ -45,7 +50,9 @@
           >made by torpadeka</a
         >
       </div>
-      <button class="button-blocker" id="button-blocker">Loading . . .</button>
+      <button class="button-blocker" id="button-blocker">
+        Loading . . .<br />Please wait a moment
+      </button>
     </header>
 
     <main id="main">
@@ -54,8 +61,8 @@
         <div class="list-controls">
           <button class="prev-button inactive-button" id="prev">Prev</button>
           <div class="list-info" id="page-info">
-            <span>Showing 1-10</span>
-            <span>from 30 results</span>
+            <span>Loading . . .</span>
+            <span>Please wait a moment</span>
           </div>
           <button class="next-button inactive-button" id="next">Next</button>
         </div>
