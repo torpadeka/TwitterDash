@@ -24,7 +24,12 @@ async function renderGetApi(page) {
   const rawData = await allUsersResponse.json();
 
   const usersData = rawData.users;
-  // console.log(usersData);
+  let usersIds = [];
+
+  for (let i = 0; i < usersData.length; i++) {
+    usersIds[i] = usersData[i].id;
+  }
+
   for (let i = usersData.length - 1; i >= usersData.length - 10; i--) {
     const currentData = usersData[i];
     userList.insertAdjacentHTML(
@@ -55,7 +60,7 @@ async function renderGetApi(page) {
 
   for (let i = usersData.length - 1; i >= usersData.length - 10; i--) {
     const userPostsResponse = await fetch(
-      `https://dummyjson.com/posts/user/${i + 1}`
+      `https://dummyjson.com/posts/user/${usersData[i].id}`
     );
 
     const userPosts = await userPostsResponse.json();
@@ -238,6 +243,9 @@ async function renderGetApi(page) {
 }
 
 renderGetApi(1);
+
+let totalMaxSearchPages = [];
+let currentSearchPage = 1;
 
 async function searchUser(page, searchQuery) {
   const searchResultsResponse = await fetch(
