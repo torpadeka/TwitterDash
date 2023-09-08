@@ -195,7 +195,6 @@ async function renderGetApi(page) {
             <span class="mini-header">Occupation</span>
             <br />
             <span class="occupation mini-content" id="occupation"
-        console.log(userPosts.posts.length);
               >${currentData.company.title}</span
             >
           </div>
@@ -282,9 +281,9 @@ async function searchUser(page, searchQuery) {
   );
 
   const searchResults = await searchResultsResponse.json();
-  console.log(searchResults);
+  // console.log(searchResults);
   allSearchLength = searchResults.users.length;
-  console.log(`allSearchLength: ${allSearchLength}`);
+  // console.log(`allSearchLength: ${allSearchLength}`);
   let maxPages = Math.floor(allSearchLength / 10) + 1;
 
   const listInfo = document.getElementById("page-info");
@@ -312,15 +311,15 @@ async function searchUser(page, searchQuery) {
     `https://dummyjson.com/users/search?q=${searchQuery}&limit=10&skip=${skip}`
   );
   const limitedSearchResults = await limitedSearchResultsResponse.json();
-  console.log(limitedSearchResults);
-  console.log(limitedSearchResults.users.length);
+  // console.log(limitedSearchResults);
+  // console.log(limitedSearchResults.users.length);
 
   let searchedUserIds = [];
   let usersData = [];
 
   for (let g = 0; g < limitedSearchResults.users.length; g++) {
     searchedUserIds[g] = limitedSearchResults.users[g].id;
-    console.log(`Found Id: ${searchedUserIds[g]}`);
+    // console.log(`Found Id: ${searchedUserIds[g]}`);
     let tempUsersDataResponse = await fetch(
       `https://dummyjson.com/users/${searchedUserIds[g]}`
     );
@@ -358,7 +357,7 @@ async function searchUser(page, searchQuery) {
 
     const user = document.getElementsByClassName("user");
     const userButton = document.getElementsByClassName("user-button");
-    console.log(userButton);
+    // console.log(userButton);
     const rightSide = document.getElementById("user-details-empty");
 
     for (
@@ -582,10 +581,10 @@ async function searchUser(page, searchQuery) {
 
     const user = document.getElementsByClassName("user");
     const userButton = document.getElementsByClassName("user-button");
-    console.log(userButton);
+    // console.log(userButton);
     const rightSide = document.getElementById("user-details-empty");
 
-    console.log(`Length: ${limitedSearchResults.users.length}`);
+    // console.log(`Length: ${limitedSearchResults.users.length}`);
 
     for (let i = limitedSearchResults.users.length - 1; i >= 0; i--) {
       async function handleUserClick() {
@@ -601,9 +600,9 @@ async function searchUser(page, searchQuery) {
         const userPostsResponse = await fetch(
           `https://dummyjson.com/posts/user/${searchedUserIds[i]}`
         );
-        console.log(`https://dummyjson.com/posts/user/${searchedUserIds[i]}`);
+        // console.log(`https://dummyjson.com/posts/user/${searchedUserIds[i]}`);
         const userPosts = await userPostsResponse.json();
-        console.log(userPosts);
+        // console.log(userPosts);
         const currentData = usersData[i];
         if (firstTime === true) {
           rightSide.classList.remove("user-details-empty");
@@ -917,7 +916,7 @@ searchInput.addEventListener("keypress", function (event) {
       prevButton.classList.toggle("active-button");
       prevButton.classList.toggle("inactive-button");
     }
-    console.log(`Search Value = ${searchInput.value}`);
+    // console.log(`Search Value = ${searchInput.value}`);
 
     if (searchInput.value === "") {
       header.insertAdjacentHTML(
