@@ -23,6 +23,15 @@ a:hover {
   color: rgb(0, 158, 221);
 }
 
+body::-webkit-scrollbar {
+  display: none;
+}
+
+body {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 /* HEADER */
 
 header {
