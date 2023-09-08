@@ -2,6 +2,12 @@
 
 const header = document.getElementById("header");
 const userList = document.getElementById("user-list");
+const logoButton = document.getElementById("logo-button");
+
+function reloadPage() {
+  location.reload();
+}
+logoButton.addEventListener("click", reloadPage);
 
 let userCustomId = 1;
 let currentPage = 1;
@@ -67,15 +73,23 @@ async function renderGetApi(page) {
   const rightSide = document.getElementById("user-details-empty");
 
   for (let i = usersData.length - 1; i >= usersData.length - 10; i--) {
-    const userPostsResponse = await fetch(
-      `https://dummyjson.com/posts/user/${usersData[i].id}`
-    );
+    async function handleUserClick() {
+      if (differentPage === true) {
+        currentSelectedUser = user[i];
+        currentSelectedUser.classList.toggle("active");
+        differentPage = false;
+      } else {
+        currentSelectedUser.classList.toggle("active");
+        currentSelectedUser = user[i];
+        currentSelectedUser.classList.toggle("active");
+      }
+      const userPostsResponse = await fetch(
+        `https://dummyjson.com/posts/user/${usersData[i].id}`
+      );
 
-    const userPosts = await userPostsResponse.json();
-    // console.log(userPosts);
-    const currentData = usersData[i];
-
-    function handleUserClick() {
+      const userPosts = await userPostsResponse.json();
+      // console.log(userPosts);
+      const currentData = usersData[i];
       if (firstTime === true) {
         rightSide.classList.remove("user-details-empty");
         rightSide.classList.add("user-details-filled");
@@ -148,16 +162,6 @@ async function renderGetApi(page) {
 
         if (userPosts.posts.length === 0) {
           postList.innerHTML += `<span class="no-posts">This user doesn't have any posts</span>`;
-        }
-
-        if (differentPage === true) {
-          currentSelectedUser = user[i];
-          currentSelectedUser.classList.toggle("active");
-          differentPage = false;
-        } else {
-          currentSelectedUser.classList.toggle("active");
-          currentSelectedUser = user[i];
-          currentSelectedUser.classList.toggle("active");
         }
       } else {
         rightSide.innerHTML = "";
@@ -358,15 +362,23 @@ async function searchUser(page, searchQuery) {
       i >= limitedSearchResults.users.length - 10;
       i--
     ) {
-      const userPostsResponse = await fetch(
-        `https://dummyjson.com/posts/user/${searchedUserIds[i]}`
-      );
+      async function handleUserClick() {
+        if (differentPage === true) {
+          currentSelectedUser = user[i];
+          currentSelectedUser.classList.toggle("active");
+          differentPage = false;
+        } else {
+          currentSelectedUser.classList.toggle("active");
+          currentSelectedUser = user[i];
+          currentSelectedUser.classList.toggle("active");
+        }
+        const userPostsResponse = await fetch(
+          `https://dummyjson.com/posts/user/${searchedUserIds[i]}`
+        );
 
-      const userPosts = await userPostsResponse.json();
-      // console.log(userPosts);
-      const currentData = usersData[i];
-
-      function handleUserClick() {
+        const userPosts = await userPostsResponse.json();
+        // console.log(userPosts);
+        const currentData = usersData[i];
         if (firstTime === true) {
           rightSide.classList.remove("user-details-empty");
           rightSide.classList.add("user-details-filled");
@@ -438,16 +450,6 @@ async function searchUser(page, searchQuery) {
 
           if (userPosts.posts.length === 0) {
             postList.innerHTML += `<span class="no-posts">This user doesn't have any posts</span>`;
-          }
-
-          if (differentPage === true) {
-            currentSelectedUser = user[i];
-            currentSelectedUser.classList.toggle("active");
-            differentPage = false;
-          } else {
-            currentSelectedUser.classList.toggle("active");
-            currentSelectedUser = user[i];
-            currentSelectedUser.classList.toggle("active");
           }
         } else {
           rightSide.innerHTML = "";
@@ -582,15 +584,23 @@ async function searchUser(page, searchQuery) {
     console.log(`Length: ${limitedSearchResults.users.length}`);
 
     for (let i = limitedSearchResults.users.length - 1; i >= 0; i--) {
-      const userPostsResponse = await fetch(
-        `https://dummyjson.com/posts/user/${searchedUserIds[i]}`
-      );
-      console.log(`https://dummyjson.com/posts/user/${searchedUserIds[i]}`);
-      const userPosts = await userPostsResponse.json();
-      console.log(userPosts);
-      const currentData = usersData[i];
-
-      function handleUserClick() {
+      async function handleUserClick() {
+        if (differentPage === true) {
+          currentSelectedUser = user[i];
+          currentSelectedUser.classList.toggle("active");
+          differentPage = false;
+        } else {
+          currentSelectedUser.classList.toggle("active");
+          currentSelectedUser = user[i];
+          currentSelectedUser.classList.toggle("active");
+        }
+        const userPostsResponse = await fetch(
+          `https://dummyjson.com/posts/user/${searchedUserIds[i]}`
+        );
+        console.log(`https://dummyjson.com/posts/user/${searchedUserIds[i]}`);
+        const userPosts = await userPostsResponse.json();
+        console.log(userPosts);
+        const currentData = usersData[i];
         if (firstTime === true) {
           rightSide.classList.remove("user-details-empty");
           rightSide.classList.add("user-details-filled");
@@ -662,16 +672,6 @@ async function searchUser(page, searchQuery) {
 
           if (userPosts.posts.length === 0) {
             postList.innerHTML += `<span class="no-posts">This user doesn't have any posts</span>`;
-          }
-
-          if (differentPage === true) {
-            currentSelectedUser = user[i];
-            currentSelectedUser.classList.toggle("active");
-            differentPage = false;
-          } else {
-            currentSelectedUser.classList.toggle("active");
-            currentSelectedUser = user[i];
-            currentSelectedUser.classList.toggle("active");
           }
         } else {
           rightSide.innerHTML = "";
