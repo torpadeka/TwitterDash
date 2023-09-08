@@ -5,14 +5,17 @@ const userList = document.getElementById("user-list");
 
 let userCustomId = 1;
 let currentPage = 1;
-let differentPage = false;
+let differentPage = true;
 let isSearch = false;
 let renderedSearchedCount = 0;
 
 let currentSearchQuery = "";
+let allSearchLength = 0;
 
 let firstTime = true;
 let firstTimeLoad = true;
+
+let currentSelectedUser = [];
 
 async function renderGetApi(page) {
   const limit = 10;
@@ -55,8 +58,6 @@ async function renderGetApi(page) {
   const user = document.getElementsByClassName("user");
   const userButton = document.getElementsByClassName("user-button");
   const rightSide = document.getElementById("user-details-empty");
-
-  let currentSelectedUser = [];
 
   for (let i = usersData.length - 1; i >= usersData.length - 10; i--) {
     const userPostsResponse = await fetch(
@@ -121,12 +122,13 @@ async function renderGetApi(page) {
         </div>`;
         firstTime = false;
         const postList = document.getElementById("post-list");
+
         for (let p = 0; p < userPosts.posts.length; p++) {
           let currentPost = userPosts.posts[p];
           postList.innerHTML += `<div class="posts">
         <span class="post-header">${currentPost.title}</span>
         <p>
-           ${currentPost.body}
+            ${currentPost.body}
         </p>
         <div class="post-tags" id="post-tags-${p}">
         </div>
@@ -137,8 +139,19 @@ async function renderGetApi(page) {
           }
         }
 
-        currentSelectedUser = user[i];
-        currentSelectedUser.classList.toggle("active");
+        if (userPosts.posts.length === 0) {
+          postList.innerHTML += `<span class="no-posts">This user doesn't have any posts</span>`;
+        }
+
+        if (differentPage === true) {
+          currentSelectedUser = user[i];
+          currentSelectedUser.classList.toggle("active");
+          differentPage = false;
+        } else {
+          currentSelectedUser.classList.toggle("active");
+          currentSelectedUser = user[i];
+          currentSelectedUser.classList.toggle("active");
+        }
       } else {
         rightSide.innerHTML = "";
         rightSide.innerHTML += `<div class="user-info">
@@ -171,6 +184,7 @@ async function renderGetApi(page) {
             <span class="mini-header">Occupation</span>
             <br />
             <span class="occupation mini-content" id="occupation"
+        console.log(userPosts.posts.length);
               >${currentData.company.title}</span
             >
           </div>
@@ -189,12 +203,13 @@ async function renderGetApi(page) {
         </div>
       </div>`;
         const postList = document.getElementById("post-list");
+
         for (let p = 0; p < userPosts.posts.length; p++) {
           let currentPost = userPosts.posts[p];
           postList.innerHTML += `<div class="posts">
         <span class="post-header">${currentPost.title}</span>
         <p>
-           ${currentPost.body}
+            ${currentPost.body}
         </p>
         <div class="post-tags" id="post-tags-${p}">
         </div>
@@ -203,6 +218,10 @@ async function renderGetApi(page) {
           for (let m = 0; m < currentPost.tags.length; m++) {
             postTags.innerHTML += `<span>${currentPost.tags[m]}</span>`;
           }
+        }
+
+        if (userPosts.posts.length === 0) {
+          postList.innerHTML += `<span class="no-posts">This user doesn't have any posts</span>`;
         }
 
         if (differentPage === true) {
@@ -227,7 +246,7 @@ async function renderGetApi(page) {
     pageInfo.innerHTML += `<span>Showing ${(currentPage - 1) * 10 + 1}-${
       currentPage * 10
     }</span>
-   <span>from 100 results</span>`;
+   <span>from 100 users</span>`;
     firstTimeLoad = false;
   }
   const enablePrevButton = document.getElementById("prev");
@@ -251,7 +270,16 @@ async function searchUser(page, searchQuery) {
   const searchResultsResponse = await fetch(
     `https://dummyjson.com/users/search?q=${searchQuery}&limit=0`
   );
+
   const searchResults = await searchResultsResponse.json();
+  console.log(searchResults);
+  allSearchLength = searchResults.users.length;
+  console.log(`allSearchLength: ${allSearchLength}`);
+
+  const listInfo = document.getElementById("page-info");
+  listInfo.innerHTML = "";
+  listInfo.innerHTML += `<span>Showing search results</span>
+      <span>(Found ${allSearchLength} Users)</span>`;
 
   const limit = 10;
   const skip = (page - 1) * limit;
@@ -307,8 +335,6 @@ async function searchUser(page, searchQuery) {
     const userButton = document.getElementsByClassName("user-button");
     console.log(userButton);
     const rightSide = document.getElementById("user-details-empty");
-
-    let currentSelectedUser = [];
 
     for (
       let i = limitedSearchResults.users.length - 1;
@@ -393,8 +419,15 @@ async function searchUser(page, searchQuery) {
             }
           }
 
-          currentSelectedUser = user[i];
-          currentSelectedUser.classList.toggle("active");
+          if (differentPage === true) {
+            currentSelectedUser = user[i];
+            currentSelectedUser.classList.toggle("active");
+            differentPage = false;
+          } else {
+            currentSelectedUser.classList.toggle("active");
+            currentSelectedUser = user[i];
+            currentSelectedUser.classList.toggle("active");
+          }
         } else {
           rightSide.innerHTML = "";
           rightSide.innerHTML += `<div class="user-info">
@@ -478,6 +511,16 @@ async function searchUser(page, searchQuery) {
 
     const buttonBlocker = document.getElementById("button-blocker");
     buttonBlocker.remove();
+    const enablePrevButton = document.getElementById("prev");
+    const enableNextButton = document.getElementById("next");
+    if (currentPage !== 1) {
+      enablePrevButton.classList.toggle("inactive-button");
+      enablePrevButton.classList.toggle("active-button");
+    }
+    if (currentPage !== Math.floor(allSearchLength / 10 + 1)) {
+      enableNextButton.classList.toggle("inactive-button");
+      enableNextButton.classList.toggle("active-button");
+    }
   } else if (
     limitedSearchResults.users.length >= 1 &&
     limitedSearchResults.users.length < 10
@@ -511,7 +554,6 @@ async function searchUser(page, searchQuery) {
     console.log(userButton);
     const rightSide = document.getElementById("user-details-empty");
 
-    let currentSelectedUser = [];
     console.log(`Length: ${limitedSearchResults.users.length}`);
 
     for (let i = limitedSearchResults.users.length - 1; i >= 0; i--) {
@@ -593,8 +635,19 @@ async function searchUser(page, searchQuery) {
             }
           }
 
-          currentSelectedUser = user[i];
-          currentSelectedUser.classList.toggle("active");
+          if (userPosts.posts.length === 0) {
+            postList.innerHTML += `<span class="no-posts">This user doesn't have any posts</span>`;
+          }
+
+          if (differentPage === true) {
+            currentSelectedUser = user[i];
+            currentSelectedUser.classList.toggle("active");
+            differentPage = false;
+          } else {
+            currentSelectedUser.classList.toggle("active");
+            currentSelectedUser = user[i];
+            currentSelectedUser.classList.toggle("active");
+          }
         } else {
           rightSide.innerHTML = "";
           rightSide.innerHTML += `<div class="user-info">
@@ -661,6 +714,10 @@ async function searchUser(page, searchQuery) {
             }
           }
 
+          if (userPosts.posts.length === 0) {
+            postList.innerHTML += `<span class="no-posts">This user doesn't have any posts</span>`;
+          }
+
           if (differentPage === true) {
             currentSelectedUser = user[i];
             currentSelectedUser.classList.toggle("active");
@@ -678,6 +735,16 @@ async function searchUser(page, searchQuery) {
 
     const buttonBlocker = document.getElementById("button-blocker");
     buttonBlocker.remove();
+    const enablePrevButton = document.getElementById("prev");
+    const enableNextButton = document.getElementById("next");
+    if (currentPage !== 1) {
+      enablePrevButton.classList.toggle("inactive-button");
+      enablePrevButton.classList.toggle("active-button");
+    }
+    if (currentPage !== Math.floor(allSearchLength / 10 + 1)) {
+      enableNextButton.classList.toggle("inactive-button");
+      enableNextButton.classList.toggle("active-button");
+    }
   } else if (limitedSearchResults.users.length === 0) {
     renderedSearchedCount = 0;
     const buttonBlocker = document.getElementById("button-blocker");
@@ -715,13 +782,44 @@ function handleNext() {
       listInfo.innerHTML += `<span>Showing ${(currentPage - 1) * 10 + 1}-${
         currentPage * 10
       }</span>
-      <span>from 100 results</span>`;
+      <span>from 100 users</span>`;
       for (let i = 1; i <= 10; i++) {
         const userForRemoval = document.getElementById(`${i}`);
         userForRemoval.remove();
       }
       differentPage = true;
       renderGetApi(currentPage);
+    }
+  } else {
+    if (
+      currentPage === Math.floor(allSearchLength / 10) + 1 ||
+      nextButton.classList.contains("inactive-button") === true
+    ) {
+      return;
+    } else {
+      header.insertAdjacentHTML(
+        "afterbegin",
+        `<button class="button-blocker" id="button-blocker">
+        Loading . . .<br />Please wait a moment
+      </button>`
+      );
+      nextButton.classList.toggle("active-button");
+      nextButton.classList.toggle("inactive-button");
+      if (prevButton.classList.contains("active-button") === true) {
+        prevButton.classList.toggle("active-button");
+        prevButton.classList.toggle("inactive-button");
+      }
+      currentPage++;
+      const listInfo = document.getElementById("page-info");
+      listInfo.innerHTML = "";
+      listInfo.innerHTML += `<span>Showing search results</span>
+      <span>(Found ${allSearchLength} Users)</span>`;
+      for (let i = 1; i <= 10; i++) {
+        const userForRemoval = document.getElementById(`${i}`);
+        userForRemoval.remove();
+      }
+      differentPage = true;
+      searchUser(currentPage, currentSearchQuery);
     }
   }
 }
@@ -752,13 +850,44 @@ function handlePrev() {
       listInfo.innerHTML += `<span>Showing ${(currentPage - 1) * 10 + 1}-${
         currentPage * 10
       }</span>
-        <span>from 100 results</span>`;
+        <span>from 100 users</span>`;
       for (let i = 1; i <= 10; i++) {
         const userForRemoval = document.getElementById(`${i}`);
         userForRemoval.remove();
       }
       differentPage = true;
       renderGetApi(currentPage);
+    }
+  } else {
+    if (
+      currentPage === 1 ||
+      prevButton.classList.contains("inactive-button") === true
+    ) {
+      return;
+    } else {
+      header.insertAdjacentHTML(
+        "afterbegin",
+        `<button class="button-blocker" id="button-blocker">
+        Loading . . .<br />Please wait a moment
+      </button>`
+      );
+      prevButton.classList.toggle("active-button");
+      prevButton.classList.toggle("inactive-button");
+      if (nextButton.classList.contains("active-button") === true) {
+        nextButton.classList.toggle("active-button");
+        nextButton.classList.toggle("inactive-button");
+      }
+      currentPage--;
+      const listInfo = document.getElementById("page-info");
+      listInfo.innerHTML = "";
+      listInfo.innerHTML += `<span>Showing search results</span>
+      <span>(Found ${allSearchLength} Users)</span>`;
+      for (let i = 1; i <= 10; i++) {
+        const userForRemoval = document.getElementById(`${i}`);
+        userForRemoval.remove();
+      }
+      differentPage = true;
+      searchUser(currentPage, currentSearchQuery);
     }
   }
 }
@@ -770,6 +899,14 @@ const searchInput = document.getElementById("search-bar");
 
 searchInput.addEventListener("keypress", function (event) {
   if (event.key === "Enter") {
+    if (nextButton.classList.contains("active-button") === true) {
+      nextButton.classList.toggle("active-button");
+      nextButton.classList.toggle("inactive-button");
+    }
+    if (prevButton.classList.contains("active-button") === true) {
+      prevButton.classList.toggle("active-button");
+      prevButton.classList.toggle("inactive-button");
+    }
     console.log(`Search Value = ${searchInput.value}`);
 
     if (searchInput.value === "") {
@@ -794,7 +931,7 @@ searchInput.addEventListener("keypress", function (event) {
       listInfo.innerHTML += `<span>Showing ${(currentPage - 1) * 10 + 1}-${
         currentPage * 10
       }</span>
-        <span>from 100 results</span>`;
+        <span>from 100 users</span>`;
       if (isSearch === false) {
         for (let i = 1; i <= 10; i++) {
           const userForRemoval = document.getElementById(`${i}`);
@@ -806,10 +943,11 @@ searchInput.addEventListener("keypress", function (event) {
           userForRemoval.remove();
         }
       }
-      differentPage = false;
+      differentPage = true;
       isSearch = false;
       renderGetApi(1);
     } else {
+      currentPage = 1;
       header.insertAdjacentHTML(
         "afterbegin",
         `<button class="button-blocker" id="button-blocker">
@@ -831,6 +969,7 @@ searchInput.addEventListener("keypress", function (event) {
       currentSearchQuery = searchInput.value;
       currentPage = 1;
       differentPage = true;
+
       searchUser(1, searchInput.value);
     }
   }
