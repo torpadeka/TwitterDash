@@ -288,7 +288,11 @@ async function searchUser(page, searchQuery) {
   let maxPages = Math.floor(allSearchLength / 10) + 1;
 
   const listInfo = document.getElementById("page-info");
-  if (currentPage === maxPages) {
+  if (allSearchLength === 0) {
+    listInfo.innerHTML = "";
+    listInfo.innerHTML += `<span>No results found :(</span>
+    <span>Try another keyword!</span>`;
+  } else if (currentPage === maxPages) {
     listInfo.innerHTML = "";
     listInfo.innerHTML += `<span>Showing ${
       (currentPage - 1) * 10 + 1
