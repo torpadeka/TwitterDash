@@ -29,6 +29,13 @@ async function renderGetApi(page) {
   const usersData = rawData.users;
   let usersIds = [];
 
+  const listInfo = document.getElementById("page-info");
+  listInfo.innerHTML = "";
+  listInfo.innerHTML += `<span>Showing ${(currentPage - 1) * 10 + 1}-${
+    currentPage * 10
+  }</span>
+  <span>from 100 results</span>`;
+
   for (let i = 0; i < usersData.length; i++) {
     usersIds[i] = usersData[i].id;
   }
@@ -246,7 +253,7 @@ async function renderGetApi(page) {
     pageInfo.innerHTML += `<span>Showing ${(currentPage - 1) * 10 + 1}-${
       currentPage * 10
     }</span>
-   <span>from 100 users</span>`;
+   <span>from 100 results</span>`;
     firstTimeLoad = false;
   }
   const enablePrevButton = document.getElementById("prev");
@@ -263,7 +270,6 @@ async function renderGetApi(page) {
 
 renderGetApi(1);
 
-let totalMaxSearchPages = [];
 let currentSearchPage = 1;
 
 async function searchUser(page, searchQuery) {
@@ -275,11 +281,22 @@ async function searchUser(page, searchQuery) {
   console.log(searchResults);
   allSearchLength = searchResults.users.length;
   console.log(`allSearchLength: ${allSearchLength}`);
+  let maxPages = Math.floor(allSearchLength / 10) + 1;
 
   const listInfo = document.getElementById("page-info");
-  listInfo.innerHTML = "";
-  listInfo.innerHTML += `<span>Showing search results</span>
-      <span>(Found ${allSearchLength} Users)</span>`;
+  if (currentPage === maxPages) {
+    listInfo.innerHTML = "";
+    listInfo.innerHTML += `<span>Showing ${
+      (currentPage - 1) * 10 + 1
+    }-${allSearchLength}</span>
+        <span>from ${allSearchLength} results</span>`;
+  } else {
+    listInfo.innerHTML = "";
+    listInfo.innerHTML += `<span>Showing ${(currentPage - 1) * 10 + 1}-${
+      currentPage * 10
+    }</span>
+    <span>from ${allSearchLength} results</span>`;
+  }
 
   const limit = 10;
   const skip = (page - 1) * limit;
@@ -419,6 +436,10 @@ async function searchUser(page, searchQuery) {
             }
           }
 
+          if (userPosts.posts.length === 0) {
+            postList.innerHTML += `<span class="no-posts">This user doesn't have any posts</span>`;
+          }
+
           if (differentPage === true) {
             currentSelectedUser = user[i];
             currentSelectedUser.classList.toggle("active");
@@ -492,6 +513,10 @@ async function searchUser(page, searchQuery) {
             for (let m = 0; m < currentPost.tags.length; m++) {
               postTags.innerHTML += `<span>${currentPost.tags[m]}</span>`;
             }
+          }
+
+          if (userPosts.posts.length === 0) {
+            postList.innerHTML += `<span class="no-posts">This user doesn't have any posts</span>`;
           }
 
           if (differentPage === true) {
@@ -777,12 +802,7 @@ function handleNext() {
         prevButton.classList.toggle("inactive-button");
       }
       currentPage++;
-      const listInfo = document.getElementById("page-info");
-      listInfo.innerHTML = "";
-      listInfo.innerHTML += `<span>Showing ${(currentPage - 1) * 10 + 1}-${
-        currentPage * 10
-      }</span>
-      <span>from 100 users</span>`;
+
       for (let i = 1; i <= 10; i++) {
         const userForRemoval = document.getElementById(`${i}`);
         userForRemoval.remove();
@@ -810,10 +830,6 @@ function handleNext() {
         prevButton.classList.toggle("inactive-button");
       }
       currentPage++;
-      const listInfo = document.getElementById("page-info");
-      listInfo.innerHTML = "";
-      listInfo.innerHTML += `<span>Showing search results</span>
-      <span>(Found ${allSearchLength} Users)</span>`;
       for (let i = 1; i <= 10; i++) {
         const userForRemoval = document.getElementById(`${i}`);
         userForRemoval.remove();
@@ -845,12 +861,6 @@ function handlePrev() {
         nextButton.classList.toggle("inactive-button");
       }
       currentPage--;
-      const listInfo = document.getElementById("page-info");
-      listInfo.innerHTML = "";
-      listInfo.innerHTML += `<span>Showing ${(currentPage - 1) * 10 + 1}-${
-        currentPage * 10
-      }</span>
-        <span>from 100 users</span>`;
       for (let i = 1; i <= 10; i++) {
         const userForRemoval = document.getElementById(`${i}`);
         userForRemoval.remove();
@@ -878,10 +888,6 @@ function handlePrev() {
         nextButton.classList.toggle("inactive-button");
       }
       currentPage--;
-      const listInfo = document.getElementById("page-info");
-      listInfo.innerHTML = "";
-      listInfo.innerHTML += `<span>Showing search results</span>
-      <span>(Found ${allSearchLength} Users)</span>`;
       for (let i = 1; i <= 10; i++) {
         const userForRemoval = document.getElementById(`${i}`);
         userForRemoval.remove();
@@ -931,7 +937,7 @@ searchInput.addEventListener("keypress", function (event) {
       listInfo.innerHTML += `<span>Showing ${(currentPage - 1) * 10 + 1}-${
         currentPage * 10
       }</span>
-        <span>from 100 users</span>`;
+        <span>from 100 results</span>`;
       if (isSearch === false) {
         for (let i = 1; i <= 10; i++) {
           const userForRemoval = document.getElementById(`${i}`);
