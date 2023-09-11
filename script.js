@@ -74,6 +74,14 @@ async function renderGetApi(page) {
 
   for (let i = usersData.length - 1; i >= usersData.length - 10; i--) {
     async function handleUserClick() {
+      rightSide.innerHTML = "";
+      if (rightSide.classList.contains("user-details-filled") === true) {
+        rightSide.classList.remove("user-details-filled");
+        rightSide.classList.add("user-details-empty");
+      }
+      rightSide.innerHTML += `<span class="right-loading"
+      >Loading . . .</span>`;
+
       if (differentPage === true) {
         currentSelectedUser = user[i];
         currentSelectedUser.classList.toggle("active");
@@ -164,6 +172,10 @@ async function renderGetApi(page) {
           postList.innerHTML += `<span class="no-posts">This user doesn't have any posts</span>`;
         }
       } else {
+        if (rightSide.classList.contains("user-details-empty") === true) {
+          rightSide.classList.remove("user-details-empty");
+          rightSide.classList.add("user-details-filled");
+        }
         rightSide.innerHTML = "";
         rightSide.innerHTML += `<div class="user-info">
         <div class="user-profile">
@@ -366,6 +378,13 @@ async function searchUser(page, searchQuery) {
       i--
     ) {
       async function handleUserClick() {
+        rightSide.innerHTML = "";
+        if (rightSide.classList.contains("user-details-filled") === true) {
+          rightSide.classList.remove("user-details-filled");
+          rightSide.classList.add("user-details-empty");
+        }
+        rightSide.innerHTML += `<span class="right-loading"
+         >Loading . . .</span>`;
         if (differentPage === true) {
           currentSelectedUser = user[i];
           currentSelectedUser.classList.toggle("active");
@@ -455,6 +474,10 @@ async function searchUser(page, searchQuery) {
             postList.innerHTML += `<span class="no-posts">This user doesn't have any posts</span>`;
           }
         } else {
+          if (rightSide.classList.contains("user-details-empty") === true) {
+            rightSide.classList.remove("user-details-empty");
+            rightSide.classList.add("user-details-filled");
+          }
           rightSide.innerHTML = "";
           rightSide.innerHTML += `<div class="user-info">
         <div class="user-profile">
@@ -588,6 +611,13 @@ async function searchUser(page, searchQuery) {
 
     for (let i = limitedSearchResults.users.length - 1; i >= 0; i--) {
       async function handleUserClick() {
+        rightSide.innerHTML = "";
+        if (rightSide.classList.contains("user-details-filled") === true) {
+          rightSide.classList.remove("user-details-filled");
+          rightSide.classList.add("user-details-empty");
+        }
+        rightSide.innerHTML += `<span class="right-loading"
+         >Loading . . .</span>`;
         if (differentPage === true) {
           currentSelectedUser = user[i];
           currentSelectedUser.classList.toggle("active");
@@ -677,6 +707,10 @@ async function searchUser(page, searchQuery) {
             postList.innerHTML += `<span class="no-posts">This user doesn't have any posts</span>`;
           }
         } else {
+          if (rightSide.classList.contains("user-details-empty") === true) {
+            rightSide.classList.remove("user-details-empty");
+            rightSide.classList.add("user-details-filled");
+          }
           rightSide.innerHTML = "";
           rightSide.innerHTML += `<div class="user-info">
         <div class="user-profile">
